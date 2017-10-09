@@ -20,8 +20,7 @@ function saveAd(element, url, image, text, source) {
             action: "saveAd",
             image: encodeURI(image),
             url: encodeURI(url),
-            text: text,
-            source: encodeURI(source)
+            text: text
         }, function(response) {
           console.log(response);
         });

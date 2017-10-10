@@ -6,8 +6,28 @@ $(function () {
 
 function checkForBannerAds() {
     
-    console.log('******** Getting Banner Ads'); 
+    //console.log('******** Getting Banner Ads'); 
 
+
+    if(document.documentElement.innerHTML.indexOf("2mdn") > -1) {
+
+        var regex = new RegExp("creativeData = ({(.*)});try");
+        results = regex.exec(document.documentElement.innerHTML);
+        
+        var ad_data = eval("("+results[1]+")");
+        //console.log(ad_data);
+
+        var url = ad_data.exitEvents[0].destinationUrl;
+        var image = ad_data.primaryFiles[1].url;
+
+        
+        if(url && image) {
+            saveAd($('body'), url, image, '', window.location.href);
+        }
+
+    }
+
+    
     $("a").each(function(){
 
         if (this.href.indexOf('googlead') != -1

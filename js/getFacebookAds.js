@@ -32,7 +32,7 @@ function checkForFacebookAds() {
             	getFacebookAdvertiserUrl($(this));
             }
 
-            saveAd($(this), url, image, text, 'facebook');
+            saveAd($(this), url, image, text);
 
         }
 
@@ -55,7 +55,7 @@ function getFacebookAdvertiserUrl(element) {
         		url = url.replace('u=','');
         		console.log('found url');
 
-        		saveAd(element, url, image, text, 'facebook');
+        		saveAd(element, url, image, text);
         	}
 		});
 

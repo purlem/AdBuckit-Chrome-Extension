@@ -4,9 +4,7 @@ var timerStart = Date.now();
 chrome.tabs.onUpdated.addListener(function(tabId, changeInf, tab) {
     var UpdatedTabId = tabId;
 
-    chrome.tabs.query({'active': true, 'lastFocusedWindow': true}, function (tabs) {
-        parent_url = tabs[0].url;
-    });
+    parent_url = tab.url;
 
     chrome.tabs.query({
         active: true

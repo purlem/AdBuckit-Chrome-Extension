@@ -3,28 +3,6 @@ $(function () {
 });
 
 
-function GetScript(str) {
-  var div = $('<div>'), tmpdiv = $('<div>'), scr, ret = '<script';
-
-  div[0].innerHTML = str;
-  scr = div.find('script');
-
-
-  for ( var i = 0; i < scr[0].attributes.length; i++ ) {
-    var attr = scr[0].attributes[i];
-
-    if ( attr.value && attr.value != '' )
-      ret += ' ' + attr.name + '="' + 
-             tmpdiv.text(attr.value).html().replace(/"/g, '&quot;') +
-             '"';
-  }
-
-  //console.log(scr.text().replace(/\r?\n|\r/g,""));
-
-  return scr.text().replace(/\r?\n|\r/g,"");
-}
-
-
 function checkForBannerAds() {
 
 
@@ -91,9 +69,7 @@ function checkForBannerAds() {
             var image = ad_data.backupImageUrl;
         }
        
-            
-        console.log(url);
-        console.log(image);
+        
 
         if(url && image) {
             saveAd($('body'), url, image, '');
@@ -104,7 +80,9 @@ function checkForBannerAds() {
     
     $("a").each(function(){
 
-        console.log('link found: '+this.href);
+        if(this.href.indexOf('whythisad') != -1) {
+            return ;
+        }
 
         if (this.href.indexOf('googlead') != -1
             || this.href.indexOf('doubleclick') != -1
@@ -122,32 +100,20 @@ function checkForBannerAds() {
             	return;
             }
 
-			//First try to image within current div
-			var image = $(this).find('img').first().attr('src');
 
-			//Otherwise, try parent
-			if(image == null) {
-				image = $(this).parent().find('img').first().attr('src');
-			}
-			
-            if(image 
-                && image.indexOf('adbuck') == -1
-                && image.indexOf('adchoices') == -1) {
-            	showStatus($(this), 'got image', image);
-            } else {
+            image = GetImage($(this));
+            if(image != null) {
+                showStatus($(this), 'got image', image);
+            }
+            else {
             	showStatus($(this), 'no image');
             	return;
             }
 
-
-            var text = $(this).parent().find('#text1').text()+' '+$(this).parent().find('#text2').text();
+            text = GetText($(this));
             if(text != null) {
-            	showStatus($(this), 'got text', text);
+                showStatus($(this), 'got text', text);
             }
-
-            //console.log('URL: '+url);
-            //console.log('Image: '+image);
-            //console.log('Text: '+text);
             
             if(url && image) {
             	saveAd($(this), url, image, text);
@@ -157,5 +123,71 @@ function checkForBannerAds() {
         }
 
     });
+}
 
+function GetText(element) {
+
+    var text = element.parent().find('#text1').text()+' '+$(this).parent().find('#text2').text();
+
+    if(text) {
+        text = element.parent().find('span').text();        
+    }
+
+    return text;
+
+}
+
+function GetImage(element) {
+    //First try to image within current div
+    var image = element.find('img').first().attr('src');
+    
+    if(!ValidateImage(image)) {
+       
+        //try parent
+        image = element.parent().find('img').first().attr('src');
+
+        if(!ValidateImage(image)) {
+
+            //try parents parent
+            image = element.parent().parent().find('img').first().attr('src');
+
+            if(!ValidateImage(image)) {
+                return false;
+            }
+        }
+    }
+
+    return image;
+
+}
+
+function ValidateImage(src) {
+
+    if(src.indexOf('adbuck') == -1 && src.indexOf('adchoices') == -1) {
+        return true;
+    }
+
+    return false;
+
+}
+
+function GetScript(str) {
+  var div = $('<div>'), tmpdiv = $('<div>'), scr, ret = '<script';
+
+  div[0].innerHTML = str;
+  scr = div.find('script');
+
+
+  for ( var i = 0; i < scr[0].attributes.length; i++ ) {
+    var attr = scr[0].attributes[i];
+
+    if ( attr.value && attr.value != '' )
+      ret += ' ' + attr.name + '="' + 
+             tmpdiv.text(attr.value).html().replace(/"/g, '&quot;') +
+             '"';
+  }
+
+  //console.log(scr.text().replace(/\r?\n|\r/g,""));
+
+  return scr.text().replace(/\r?\n|\r/g,"");
 }

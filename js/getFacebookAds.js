@@ -10,7 +10,7 @@ $(function () {
 
 function checkForFacebookAds() {
     
-    //console.log('******** Getting Facebook Ads');
+    console.log('******** Checking for Facebook Ads');
 
 
     $(".fbUserStory").each(function(){

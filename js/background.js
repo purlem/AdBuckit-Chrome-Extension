@@ -4,7 +4,8 @@ var timerStart = Date.now();
 chrome.tabs.onUpdated.addListener(function(tabId, changeInf, tab) {
     var UpdatedTabId = tabId;
 
-    parent_url = tab.url;
+    if(tab.url)
+        parent_url = tab.url;
 
     chrome.tabs.query({
         active: true
@@ -30,7 +31,7 @@ chrome.tabs.onUpdated.addListener(function(tabId, changeInf, tab) {
                     file: "js/ads.js",
                 });
 
-                if (tab.url.search("facebook.com") == -1 ) {
+                if (tab.url.search("facebook.com") == -1) {
                     chrome.tabs.executeScript(tab.id, {
                         allFrames: true,
                         file: "js/getBannerAds.js"

@@ -5,7 +5,7 @@ function showStatus(element, status, description) {
     if(description) console.log(status+': '+description);
 }
 
-function saveAd(element, url, image, text, source) {
+function saveAd(element, url, image, text) {
 
     console.log('URL: '+url);
     console.log('Image: '+image);

@@ -13,7 +13,8 @@ function checkForFacebookAds() {
     console.log('******** Checking for Facebook Ads');
 
 
-    $(".fbUserStory").each(function(){
+    //$(".fbUserStory").each(function(){
+    $(".userContentWrapper").each(function(){
 
         if($(this).text().indexOf('Sponsored') > -1) {
             //console.log($(this).html());
@@ -30,9 +31,10 @@ function checkForFacebookAds() {
 
             if(!url) {
             	getFacebookAdvertiserUrl($(this));
+            } else {
+                saveAd($(this), url, image, text);
             }
 
-            saveAd($(this), url, image, text);
 
         }
 
